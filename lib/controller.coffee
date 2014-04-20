@@ -18,10 +18,10 @@ class Controller
     @res.writeHead(@status, headers)
     @res.end(body)
 
-  dispatch: (action, segments) ->
+  dispatch: (action, segments=[]) ->
     if typeof action is 'string'
       action = @[action]
 
-    action.call(@, segments...)
+    action.apply(@, segments)
 
 module.exports = Controller
