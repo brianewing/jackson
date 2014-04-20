@@ -1,0 +1,10 @@
+{
+  "name": "jackson",
+  "description": "Jackson, the web application framework",
+  "version": "0.0.1",
+
+  "dependencies": {
+    "url-pattern": "~0.5.0",
+    "ect": "~0.5.0"
+  }
+}
