@@ -11,17 +11,20 @@ class Application
   @route = ->
     (@router ||= new Router).route(arguments...)
 
+  constructor: ->
+    @_ect = {}
+
   listen: ->
     @_server = http.createServer(@process)
     @_server.listen(arguments...)
 
   process: (req, res) =>
     if route = @constructor.router?.match(req)
-      @dispatch(route, req, res)
+      @dispatch(req, res, route)
     else
-      res.end('404')
+      @dispatchDefault(req, res, 'notFound')
 
-  dispatch: (route, req, res) ->
+  dispatch: (req, res, route) ->
     {fn, controller, action, segments} = route
 
     if controller? and action
@@ -37,18 +40,26 @@ class Application
       controller = new Controller(@, req, res)
       controller.dispatch(fn, segments)
 
+  dispatchDefault: (req, res, action) ->
+    @dispatch(req, res, controller: 'DefaultHandlers', action: action)
+
   lookup: (path) ->
     path.split('.').reduce ((obj, key) -> if key then obj[key] else obj), @constructor
 
-  renderTemplate: (tpl, context) ->
-    if not @_ect
-      root = @templateRoot || path.join(process.cwd(), 'templates')
-      @_ect = ECT(watch: true, root: root)
+  renderTemplate: (templateRoot, tpl, context) ->
+    templateRoot = templateRoot or @templateRoot or path.join(process.cwd(), 'templates')
 
-    @_ect.render(tpl, context)
+    @_ect[templateRoot] ||= ECT(watch: true, root: templateRoot)
+    @_ect[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
     msgs = [new Date().toISOString(), "|", msgs...]
     console.log.apply(console, msgs)
+
+class Application.DefaultHandlers extends Controller
+  templateRoot: __dirname + '/../tpl'
+
+  notFound: ->
+    @render '404.html', {url: @req.url}
 
 module.exports = Application

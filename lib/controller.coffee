@@ -12,7 +12,7 @@ class Controller
 
   render: (tpl, context) ->
     context = extend({}, @view, context)
-    body = @app.renderTemplate tpl, context
+    body = @app.renderTemplate @templateRoot, tpl, context
 
     headers = extend {'content-length': body.length, 'content-type': 'text/html'}, @headers
     @res.writeHead(@status, headers)
