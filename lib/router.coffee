@@ -27,8 +27,7 @@ class Router
   match: (req) ->
     for route in @_routes
       if req.method is route.method and match = route.pattern.match(req.url)
-        segments = (value for own key, value of match)
-        return extend({segments}, route)
+        return extend({routeParams: match}, route)
 
     false
 
