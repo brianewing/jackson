@@ -3,9 +3,20 @@
   "description": "Jackson, the web application framework",
   "version": "0.0.1",
 
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register --reporter spec --require test/test_helper.coffee --recursive",
+    "debug": "mocha debug --compilers coffee:coffee-script/register --require test/test_helper.coffee --recursive"
+  },
+
   "dependencies": {
+    "coffee-script": "~1.7.1",
     "url-pattern": "~0.5.0",
     "async": "~0.7.0",
     "ect": "~0.5.0"
+  },
+
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1"
   }
 }
