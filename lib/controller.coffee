@@ -2,9 +2,11 @@ path = require('path')
 
 async = require('async')
 
-{extend} = require('./util')
+{extend, JSHelpers} = require('./util')
 
 class Controller
+  JSHelpers(@)
+
   @bind = (event, callbacks...) ->
     # we clone @_callbacks, then set
     # @_callbacks[event] to a new array [existingCallbacks..., callbacks...]
