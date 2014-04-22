@@ -15,13 +15,14 @@ describe "Jackson.Controller", ->
   describe '#apply()', ->
     it 'calls functions in the context of the controller', ->
       controller = new Jackson.Controller
-      controller.hello = 'world'
+      controller.apply -> expect(@).to.equal(controller)
 
-      controller.apply -> expect(@hello).to.equal('world')
-
+  describe '#applyAsAction()', ->
     it 'calls functions with route segments as arguments', ->
       controller = new Jackson.Controller({}, {}, {}, {foo: 'bar', bar: 'baz', id: 123})
-      controller.apply (foo, bar, id) ->
+      controller.applyAsAction (foo, bar, id) ->
+        expect(@).to.equal(controller)
+
         expect(foo).to.equal('bar')
         expect(bar).to.equal('baz')
         expect(id).to.equal(123)

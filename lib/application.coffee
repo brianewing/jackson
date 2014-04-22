@@ -1,6 +1,7 @@
 http = require('http')
 fs = require('fs')
 path = require('path')
+util = require('util')
 
 ECT = require('ect')
 
@@ -13,6 +14,7 @@ class Application
 
   constructor: ->
     @_ect = {}
+    @initialize?()
 
   listen: ->
     @_server = http.createServer(@process)
@@ -22,7 +24,7 @@ class Application
     if route = @constructor.router?.match(req)
       @dispatch(req, res, route)
     else
-      @dispatchDefault(req, res, 'notFound')
+      @render(req, res, 'notFound')
 
   dispatch: (req, res, route) ->
     {fn, controller, action, routeParams} = route
@@ -38,10 +40,10 @@ class Application
     if fn
       # dispatch under generic controller
       controller = new Controller(@, req, res, routeParams)
-      controller.apply(fn)
+      controller.applyAsAction(fn)
 
-  dispatchDefault: (req, res, action) ->
-    @dispatch(req, res, controller: 'DefaultHandlers', action: action)
+  render: (req, res, action, args...) ->
+    new @constructor.DefaultHandlers(@, req, res).apply(action, args...)
 
   lookup: (path) ->
     path.split('.').reduce ((obj, key) -> if key then obj[key] else obj), @constructor
@@ -59,7 +61,11 @@ class Application
 class Application.DefaultHandlers extends Controller
   templateRoot: __dirname + '/../tpl'
 
-  notFound: ->
-    @render '404.html', {url: @req.url}
+  initialize: ->
+    @view.inspect = util.inspect
+    @view.req = @req
+
+  notFound: -> @render '404.html'
+  error: (error) -> @render '500.html', {error}
 
 module.exports = Application

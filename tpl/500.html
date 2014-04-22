@@ -1,0 +1,19 @@
+<% extend 'layout.html' %>
+
+<% switch typeof @error: %>
+  <% when 'object': %>
+    <h1><%- @error.name %></h1>
+    <h2><%- @error.message %></h2>
+
+    <pre><%- @error.stack %></pre>
+  <% end %>
+
+  <% when 'string': %>
+    <h1>Error</h1>
+    <h2><%- @error %></h2>
+  <% end %>
+<% end %>
+
+<hr>
+<h3>Request</h3>
+<% include '_request.html', {@req, @inspect} %>

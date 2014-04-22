@@ -1,21 +1,8 @@
-<!doctype>
-<html lang="en">
-  <head>
-    <title>Not found</title>
-    <meta charset="utf-8">
+<% extend 'layout.html' %>
 
-    <style>
-      body {
-        padding: 50px 10%;
-        font-family: sans-serif;
-      }
-    </style>
-  </head>
+<h1>404 Not Found</h1>
+URL not found: <pre style="display: inline"><%- @req.url %></pre>
 
-  <body>
-    <h1>404 Not Found</h1>
-
-    <p>URL not found: <%- @url %></p>
-  </body>
-</html>
-
+<hr>
+<h3>Request</h3>
+<% include '_request.html', {@req, @inspect} %>

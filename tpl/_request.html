@@ -1,0 +1,11 @@
+<table class="table table-striped">
+  <% entry = (name, value) =>: %>
+    <tr>
+      <th><%- name %></th>
+      <td><%- @inspect value %></td>
+    </tr>
+  <% end %>
+
+  <% entry 'Headers', @req.headers %>
+  <% entry 'HTTP Version', @req.httpVersion %>
+</table>

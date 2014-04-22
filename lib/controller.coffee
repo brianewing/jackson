@@ -21,10 +21,14 @@ class Controller
     iter = (callback, cb) ->
       callback = instance[callback] if typeof callback is 'string'
 
-      if callback.length is 1
-        callback.call(instance, cb)
-      else
-        cb(callback.call(instance) is true)
+      try
+        if callback.length is 1
+          instance.apply(callback, cb)
+        else
+          cb(instance.apply(callback) is true)
+      catch error
+        instance.error(error)
+        cb(true)
 
     async.forEachSeries(callbacks, iter, cb)
 
@@ -67,17 +71,27 @@ class Controller
     @res.writeHead(status, @headers)
     @res.end(body)
 
-  apply: (fn) ->
-    fn.apply(@, (value for own key, value of @routeParams))
+  apply: (fn, args...) ->
+    fn = if typeof fn is 'function' then fn else @[fn]
+
+    try
+      fn.apply(@, args)
+    catch error
+      @error(error)
+      true
+
+  applyAsAction: (action) ->
+    @apply action, (value for own key, value of @routeParams)...
 
   callAction: (action, cb) ->
-    method = @[action]
-
     @constructor.fire @, 'before', =>
       @constructor.fire @, "before:#{action}", =>
-        @apply(method)
+        @applyAsAction(action)
 
         @constructor.fire @, 'after', =>
           @constructor.fire @, "after:#{action}", cb
+
+  error: (error) ->
+    @app.render(@req, @res, 'error', error)
 
 module.exports = Controller
