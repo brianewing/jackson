@@ -5,7 +5,8 @@
 
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register --reporter spec --require test/test_helper.coffee --recursive",
-    "debug": "mocha debug --compilers coffee:coffee-script/register --require test/test_helper.coffee --recursive"
+    "debug": "mocha debug --compilers coffee:coffee-script/register --require test/test_helper.coffee --recursive",
+    "repl": "node scripts/repl.js"
   },
 
   "dependencies": {
