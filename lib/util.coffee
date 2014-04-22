@@ -6,7 +6,7 @@ extend = (obj, rest...) ->
 
 clone = (obj, rest...) -> extend({}, obj, rest...)
 
-JSHelpers = (klass) ->
+ClassHelpers = (klass) ->
   klass.extend = (extensions...) ->
     cls = class extends @
 
@@ -21,4 +21,4 @@ JSHelpers = (klass) ->
 
   klass::bind = (fn, curry...) -> fn.bind(@, curry...)
 
-module.exports = {clone, extend, JSHelpers}
+module.exports = {clone, extend, ClassHelpers}

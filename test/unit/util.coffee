@@ -1,4 +1,4 @@
-{extend, clone, JSHelpers} = require('../../lib/util')
+{extend, clone, ClassHelpers} = require('../../lib/util')
 
 describe 'Utils', ->
   describe 'extend', ->
@@ -27,9 +27,9 @@ describe 'Utils', ->
       expect(moe).not.to.equal(joe)
       expect(moe).to.deep.equal(name: 'Mike', age: 20, likes: 'basketball')
 
-  describe 'Javascript helpers', ->
+  describe 'Class helpers', ->
     class Animal
-      JSHelpers(@)
+      ClassHelpers(@)
 
       eats: 'food'
       greet: -> 'animal'

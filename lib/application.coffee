@@ -7,10 +7,10 @@ ECT = require('ect')
 
 Router = require('./router')
 Controller = require('./controller')
-{JSHelpers} = require('./util')
+{ClassHelpers} = require('./util')
 
 class Application
-  JSHelpers(@)
+  ClassHelpers(@)
 
   @route = ->
     (@router ||= new Router).route(arguments...)
