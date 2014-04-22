@@ -7,7 +7,7 @@ ECT = require('ect')
 
 Router = require('./router')
 Controller = require('./controller')
-{ClassHelpers} = require('./util')
+{clone, ClassHelpers} = require('./util')
 
 class Application
   ClassHelpers(@)
@@ -15,8 +15,13 @@ class Application
   @route = ->
     (@router ||= new Router).route(arguments...)
 
+  @helper = (name, fn) ->
+    @helpers = clone(@helpers)
+    @helpers[name] = fn
+
   constructor: ->
     @_ect = {}
+
     @initialize?()
 
   listen: ->

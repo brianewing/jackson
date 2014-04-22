@@ -2,7 +2,7 @@ path = require('path')
 
 async = require('async')
 
-{extend, ClassHelpers} = require('./util')
+{extend, clone, ClassHelpers} = require('./util')
 
 class Controller
   ClassHelpers(@)
@@ -13,7 +13,7 @@ class Controller
     # this is a semi-hack to support inheritance of callbacks in controllers
     # designed to be extended
 
-    @_callbacks = extend {}, @_callbacks
+    @_callbacks = clone(@_callbacks)
     @_callbacks[event] = (@_callbacks[event] || []).concat(callbacks)
 
   @fire = (instance, event, cb) ->
@@ -40,6 +40,10 @@ class Controller
   @after = (action, callbacks...) -> @bind "after:#{action}", callbacks...
   @afterAll = (callbacks...) -> @bind 'after', callbacks...
 
+  @helper = (name, fn) ->
+    @helpers = clone(@helpers)
+    @helpers[name] = fn
+
   status: 200
 
   constructor: (@app, @req, @res, @routeParams={}) ->
@@ -51,11 +55,13 @@ class Controller
   header: (name, value) ->
     @headers[name.toLowerCase()] = value
 
+  viewContext: (context) ->
+    extend(@app.constructor.helpers, @constructor.helpers, @view, context)
+
   render: (tpl, context) ->
     tpl = path.join(@templateDir || '', tpl)
-    context = extend({}, @view, context)
 
-    body = @app.renderTemplate @templateRoot, tpl, context
+    body = @app.renderTemplate @templateRoot, tpl, @viewContext(context)
     @respond(body)
 
   respond: (status, body) ->
