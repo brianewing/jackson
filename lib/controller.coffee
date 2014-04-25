@@ -56,7 +56,7 @@ class Controller
     @headers[name.toLowerCase()] = value
 
   viewContext: (context) ->
-    extend(@app.constructor.helpers, @constructor.helpers, @view, context)
+    clone(@app.constructor.helpers, @constructor.helpers, @view, context)
 
   render: (tpl, context) ->
     tpl = path.join(@templateDir || '', tpl)
