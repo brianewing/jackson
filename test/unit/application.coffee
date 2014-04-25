@@ -55,3 +55,52 @@ describe 'Jackson.Application', ->
       expect(Object.keys(AppTwo.helpers)).to.eql(['one', 'two', 'three'])
       expect(Object.keys(AppThree.helpers)).to.eql(['one', 'two', 'three', 'four'])
 
+  describe 'Mounts', ->
+    call = (app, url) -> app.dispatchUrl({}, {}, 'GET', url)
+
+    it 'can mount an application at a given url prefix', ->
+      called = false
+      class TestApp extends Jackson.Application
+        @route '/hello', -> called = true
+
+      app = new Jackson.Application
+      app.mount '/test', new TestApp
+
+      call app, '/test/hello'
+      expect(called).to.equal(true)
+
+    it 'supports nesting applications', ->
+      called = []
+      class AppOne extends Jackson.Application
+        @route '/', -> called.push('one')
+
+      class AppTwo extends Jackson.Application
+        @route '/', -> called.push('two')
+
+      class AppThree extends Jackson.Application
+        @route '/foo', -> called.push('three')
+
+      appOne = new AppOne
+      appTwo = new AppTwo
+      appThree = new AppThree
+
+      appOne.mount '/two', appTwo
+      appTwo.mount '/three', appThree
+
+      call appOne, '/'
+      call appOne, '/two'
+      call appOne, '/two/three/foo'
+
+      expect(called).to.eql(['one', 'two', 'three'])
+
+    it "parent app's own routes still work", ->
+      called = false
+      class TestApp extends Jackson.Application
+        @route '/', -> called = true
+
+      app = new TestApp
+      app.mount '/foo', new Jackson.Application
+
+      call app, '/'
+      expect(called).to.equal(true)
+

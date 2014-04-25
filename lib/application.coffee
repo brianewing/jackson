@@ -12,6 +12,9 @@ Controller = require('./controller')
 class Application
   ClassHelpers(@)
 
+  _mounts: null
+  _ect: null
+
   @route = ->
     (@router ||= new Router).route(arguments...)
 
@@ -20,16 +23,37 @@ class Application
     @helpers[name] = fn
 
   constructor: ->
-    @_ect = {}
+    @_ect = Object.create(null)
 
     @initialize?()
 
   listen: ->
-    @_server = http.createServer(@process)
+    @_server = http.createServer(@dispatchReq)
     @_server.listen(arguments...)
 
-  process: (req, res) =>
-    if route = @constructor.router?.match(req)
+  mount: (urlPrefix, app) ->
+    if urlPrefix[urlPrefix.length - 1] isnt '/'
+      urlPrefix += '/'
+
+    (@_mounts ||= Object.create(null))[urlPrefix] = app
+
+  dispatchReq: (req, res) =>
+    @dispatchUrl(req, res, req.method, req.url)
+
+  dispatchUrl: (req, res, method, url) ->
+    if @_mounts?
+      if url[url.length - 1] isnt '/'
+        urlWithSlash = url + '/'
+      else urlWithSlash = url
+
+      for urlPrefix, app of @_mounts
+        if urlWithSlash is urlPrefix or url[...urlPrefix.length] is urlPrefix
+          url = url.slice(urlPrefix.length - 1) or '/'
+          return app.dispatchUrl(req, res, method, url)
+
+    route = @constructor.router?.match(method, url)
+
+    if route
       @dispatch(req, res, route)
     else
       @render(req, res, 'notFound')

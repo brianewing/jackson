@@ -11,22 +11,27 @@ class Router
         @route.call(@, m, Array::slice.call(arguments, 1)...)
       return
 
-    if typeof dest isnt 'string' # called like route('/posts', 'Posts#index')
-      [method, pattern, dest, options] = ['GET', method, pattern]
+    if not dest or typeof dest is 'object' # called like route('/pattern', dest, [options])
+      [method, pattern, dest, options] = ['GET', method, pattern, dest]
 
     options ||= {}
     options.method = (options.method || method).toUpperCase()
     options.pattern = urlPattern.newPattern(pattern)
 
-    [controller, action] = dest.split('#')
-    options.controller = controller
-    options.action = action
+    if typeof dest is 'string' and dest.indexOf('#') isnt -1
+      [controller, action] = dest.split('#')
+      options.controller = controller
+      options.action = action
+    else if typeof dest is 'function'
+      options.fn = dest
+    else
+      throw new Error("Bad destination: #{dest}. Must be a function or a string like 'Controller#action'")
 
     @_routes.push(options)
 
-  match: (req) ->
+  match: (method, url) ->
     for route in @_routes
-      if req.method is route.method and match = route.pattern.match(req.url)
+      if method is route.method and match = route.pattern.match(url)
         return extend({routeParams: match}, route)
 
     false
