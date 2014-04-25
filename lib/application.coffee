@@ -63,7 +63,7 @@ class Application
     @_ect[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
-    msgs = [new Date().toISOString(), "|", msgs...]
+    msgs = [new Date().toISOString(), '-', @constructor.name, ':', msgs...]
     console.log.apply(console, msgs)
 
 class Application.DefaultHandlers extends Controller
