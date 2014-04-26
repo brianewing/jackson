@@ -31,8 +31,20 @@ class Application
     @initialize?()
 
   listen: ->
+    listenArgs = [arguments...]
+
+    if typeof listenArgs[listenArgs.length - 1] is 'function'
+      cb = listenArgs.pop()
+
+    listenType = switch typeof listenArgs[0]
+      when 'string' then 'socket'
+      when 'number' then 'port'
+      else ''
+
     @_server = http.createServer(@dispatchReq)
-    @_server.listen(arguments...)
+    @_server.listen listenArgs..., =>
+      @log("Listening on #{listenType} #{listenArgs[0]}, pid #{process.pid}")
+      cb?()
 
   mount: (urlPrefix, app) ->
     if urlPrefix[urlPrefix.length - 1] isnt '/'
