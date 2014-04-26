@@ -18,6 +18,9 @@ class Application
   @route = ->
     (@router ||= new Router).route(arguments...)
 
+  @resource = ->
+    (@router ||= new Router).resource(arguments...)
+
   @helper = (name, fn) ->
     @helpers = clone(@helpers)
     @helpers[name] = fn
