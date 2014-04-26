@@ -6,17 +6,21 @@
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register --reporter spec --require test/test_helper.coffee --recursive",
     "debug": "mocha debug --compilers coffee:coffee-script/register --require test/test_helper.coffee --recursive",
-    "repl": "node scripts/repl.js"
+    "repl": "node scripts/repl.js",
+    "build": "coffee -c index.coffee && coffee -o lib/ -c src/",
+    "watch": "coffee -c index.coffee && coffee -w -o lib/ -c src/",
+    "prepublish": "coffee -c index.coffee && coffee -o lib/ -c src/"
   },
 
   "dependencies": {
-    "coffee-script": "~1.7.1",
     "url-pattern": "~0.5.0",
     "async": "~0.7.0",
     "ect": "~0.5.0"
   },
 
   "devDependencies": {
+    "coffee-script": "~1.7.1",
+
     "mocha": "~1.18.2",
     "chai": "~1.9.1"
   }
