@@ -25,8 +25,12 @@ class Application
     @helpers = clone(@helpers)
     @helpers[name] = fn
 
-  constructor: ->
+  options:
+    logRequests: true
+
+  constructor: (options) ->
     @_ect = Object.create(null)
+    @options = clone(@options, options)
 
     @initialize?()
 
@@ -53,6 +57,7 @@ class Application
     (@_mounts ||= Object.create(null))[urlPrefix] = app
 
   dispatchReq: (req, res) =>
+    req._dispatchedAt = new Date
     @dispatchUrl(req, res, req.method, req.url)
 
   dispatchUrl: (req, res, method, url) ->
@@ -102,8 +107,12 @@ class Application
     @_ect[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
-    msgs = [new Date().toISOString(), '-', @constructor.name, ':', msgs...]
+    msgs = [new Date().toISOString(), '|', @constructor.name, '|', msgs...]
     console.log.apply(console, msgs)
+
+  logRequest: (req) ->
+    msTaken = if req._dispatchedAt then (new Date - req._dispatchedAt) else '?'
+    @log req.connection.remoteAddress, '|', msTaken + 'ms', '|', req.method, req.url
 
 class Application.DefaultHandlers extends Controller
   templateRoot: __dirname + '/../tpl'
