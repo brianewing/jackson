@@ -1,3 +1,5 @@
+path = require('path')
+
 urlPattern = require('url-pattern')
 {extend} = require('./util')
 
@@ -9,9 +11,9 @@ class Router
     dest = (action) -> [controller, action].join '#'
 
     @route('GET', pattern, dest('index'), options)
-    @route('GET', "#{pattern}/:id", dest('show'), options)
+    @route('GET', path.join(pattern, ":id"), dest('show'), options)
     @route('POST', pattern, dest('create'), options)
-    @route(['POST', 'PUT', 'PATCH'], "#{pattern}/:id", dest('update'), options)
+    @route(['POST', 'PUT', 'PATCH'], path.join(pattern, ":id"), dest('update'), options)
     @route('DELETE', pattern, dest('delete'), options)
 
   route: (method, pattern, dest, options) ->
