@@ -79,8 +79,6 @@ class Controller
     @res.writeHead(status, @headers)
     @res.end(body)
 
-    @app.logRequest(@req) if @app.options.logRequests
-
   apply: (fn, args...) ->
     fn = if typeof fn is 'function' then fn else @[fn]
 

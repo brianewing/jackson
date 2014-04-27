@@ -57,7 +57,10 @@ class Application
     (@_mounts ||= Object.create(null))[urlPrefix] = app
 
   dispatchReq: (req, res) =>
-    req._dispatchedAt = new Date
+    if @options.logRequests
+      req._timestamp = +new Date
+      res.on 'finish', @bind(@logRequest, req)
+
     @dispatchUrl(req, res, req.method, req.url)
 
   dispatchUrl: (req, res, method, url) ->
@@ -111,7 +114,7 @@ class Application
     console.log.apply(console, msgs)
 
   logRequest: (req) ->
-    msTaken = if req._dispatchedAt then (new Date - req._dispatchedAt) else '?'
+    msTaken = (new Date) - req._timestamp
     @log req.connection.remoteAddress, '|', msTaken + 'ms', '|', req.method, req.url
 
 class Application.DefaultHandlers extends Controller
