@@ -5,7 +5,7 @@ urlPattern = require('url-pattern')
 
 class Router
   constructor: ->
-    @_routes = []
+    @routes = []
 
   resource: (pattern, controller, options) ->
     dest = (action) -> [controller, action].join '#'
@@ -38,10 +38,10 @@ class Router
     else
       throw new Error("Bad destination: #{dest}. Must be a function or a string like 'Controller#action'")
 
-    @_routes.push(options)
+    @routes.push(options)
 
   match: (method, url) ->
-    for route in @_routes
+    for route in @routes
       if method is route.method and match = route.pattern.match(url)
         return extend({routeParams: match}, route)
 
