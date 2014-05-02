@@ -15,6 +15,7 @@
   "dependencies": {
     "url-pattern": "~0.5.0",
     "async": "~0.7.0",
+    "minimist": "~0.0.6",
     "ect": "~0.5.0"
   },
 
