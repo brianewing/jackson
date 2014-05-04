@@ -36,7 +36,7 @@ class CLI
 
     s: 'server'
     server: ->
-      port = @args.port || @args.p || 3000
+      port = @args.port || @args.p || 1234
       @app.listen(port)
 
     h: 'help'
