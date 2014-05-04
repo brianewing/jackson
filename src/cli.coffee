@@ -6,17 +6,18 @@ class CLI
   jacksonVersion = require(__dirname + '/../package.json').version
 
   constructor: (@app, @argv) ->
-    @args = minimist(@argv)
+    @args = minimist(@argv || '')
 
   run: ->
     [command, subcommands...] = @args._
 
     for own arg, value of @args when value is true and not command
+      # flags without arguments may also be commands, eg '--version'
       if @commands[arg]
         command = arg
 
     command ||= 'default'
-    handler = @handler(command) # flags without arguments may also be commands, eg '--version'
+    handler = @handler(command)
 
     if handler
       handler.apply(@, subcommands)

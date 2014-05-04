@@ -53,10 +53,6 @@ class Application
       @log("Listening on #{desc}, pid #{process.pid.toString().red}")
       cb?()
 
-  runCli: (args)->
-    args ||= process.argv.slice(2)
-    new CLI(@, args).run()
-
   mount: (urlPrefix, app) ->
     if urlPrefix[urlPrefix.length - 1] isnt '/'
       urlPrefix += '/'
