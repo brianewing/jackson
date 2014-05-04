@@ -49,7 +49,7 @@ class Application
       desc = socketOrPort.white
 
     @_server = http.createServer(@dispatchReq)
-    @_server.listen args..., =>
+    @_server.listen socketOrPort, args..., =>
       @log("Listening on #{desc}, pid #{process.pid.toString().red}")
       cb?()
 
@@ -65,8 +65,6 @@ class Application
 
   dispatchReq: (req, res) =>
     req._timestamp = +new Date
-
-
     @dispatchUrl(req, res, req.method, req.url)
 
   dispatchUrl: (req, res, method, url) ->
