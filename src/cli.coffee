@@ -3,6 +3,8 @@ minimist = require('minimist')
 {clone} = require('./util')
 
 class CLI
+  jacksonVersion = require(__dirname + '/../package.json').version
+
   constructor: (@app, @argv) ->
     @args = minimist(@argv)
 
@@ -39,7 +41,6 @@ class CLI
 
     h: 'help'
     help: ->
-      jacksonVersion = require(__dirname + '/../package.json').version
       versionString = "Jackson v#{jacksonVersion}"
 
       console.log Array(versionString.length + 1).join("-")
@@ -53,4 +54,9 @@ class CLI
             --port=1234 - Listen on a port (alias 'p')
             --socket=/path/to-socket - Listen on a socket
       """
+
+    v: 'version'
+    version: ->
+      console.log "Jackson v#{jacksonVersion}"
+
 module.exports = CLI
