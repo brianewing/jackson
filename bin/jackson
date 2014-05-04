@@ -29,7 +29,12 @@ try {
   if(app && typeof app.runCli == 'function') {
     app.runCli();
   } else {
-    console.error("Please export your application instance, eg: module.exports = new MyApp()");
+    if(app) {
+      console.error("Please export your application instance, eg: module.exports = new MyApp()");
+    } else {
+      console.error("No app module found, tried: " + moduleNames.join(", "));
+    }
+
     process.exit(1);
   }
 } catch(e) {
