@@ -19,7 +19,7 @@ describe "Jackson.Controller", ->
 
   describe '#applyAsAction()', ->
     it 'calls functions with route segments as arguments', ->
-      controller = new Jackson.Controller({}, {}, {}, {foo: 'bar', bar: 'baz', id: 123})
+      controller = new Jackson.Controller({}, stubReqRes()..., {foo: 'bar', bar: 'baz', id: 123})
       controller.applyAsAction (foo, bar, id) ->
         expect(@).to.equal(controller)
 
@@ -81,16 +81,17 @@ describe "Jackson.Controller", ->
     stubApp =
       renderTemplate: -> 'rendered template'
 
-    stubRes =
-      writeHead: (status, headers) ->
-        response.status = status
-        response.headers = headers
+    [stubReq, stubRes] = stubReqRes()
 
-      end: (body) ->
-        response.body = body
+    stubRes.writeHead = (status, headers) ->
+      response.status = status
+      response.headers = headers
+
+    stubRes.end = (body) ->
+      response.body = body
 
     it 'renders templates', ->
-      controller = new Jackson.Controller(stubApp, {}, stubRes, {})
+      controller = new Jackson.Controller(stubApp, stubReq, stubRes, {})
       controller.test = -> @render('unused')
 
       controller.callAction 'test'
@@ -103,7 +104,7 @@ describe "Jackson.Controller", ->
     it 'responds with JSON', ->
       user = {name: 'Joe', email: 'joe@bloggs.dev'}
 
-      controller = new Jackson.Controller({}, {}, stubRes, {})
+      controller = new Jackson.Controller(stubApp, stubReq, stubRes, {})
       controller.test = -> @respond(123, user)
 
       controller.callAction 'test'

@@ -20,7 +20,7 @@ describe 'Jackson.Application', ->
     route = {controller: 'Test', action: 'foo'}
 
     app = new App()
-    app.dispatch({}, {}, route)
+    app.dispatch(stubReqRes()..., route)
 
     expect(called).to.equal(true)
 
@@ -30,7 +30,7 @@ describe 'Jackson.Application', ->
       class @Foo
         bar: -> constructor = @constructor
 
-    new App().dispatch({}, {}, controller: 'Foo', action: 'bar')
+    new App().dispatch(stubReqRes()..., controller: 'Foo', action: 'bar')
     expect(constructor).to.equal(Jackson.Controller)
 
   describe 'Helpers', ->
@@ -56,7 +56,7 @@ describe 'Jackson.Application', ->
       expect(Object.keys(AppThree.helpers)).to.eql(['one', 'two', 'three', 'four'])
 
   describe 'Mounts', ->
-    call = (app, url) -> app.dispatchUrl({}, {}, 'GET', url)
+    call = (app, url) -> app.dispatchUrl(stubReqRes()..., 'GET', url)
 
     it 'can mount an application at a given url prefix', ->
       called = false
