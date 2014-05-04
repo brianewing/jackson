@@ -49,6 +49,10 @@ class Application
     if typeof socketOrPort is 'number'
       desc = "port #{socketOrPort.toString().green}"
     else
+      if fs.existsSync(socketOrPort) and fs.statSync(socketOrPort).isSocket()
+        # socket already exists, clean it up before bind
+        fs.unlinkSync(socketOrPort)
+
       desc = socketOrPort.white
 
     @_server = http.createServer(@dispatchReq)

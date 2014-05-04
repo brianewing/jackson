@@ -38,8 +38,7 @@ class CLI
 
     s: 'server'
     server: ->
-      port = @args.port || @args.p || 1234
-      @app.listen(port)
+      @app.listen(@args.socket || parseInt(@args.port || @args.p) || 1234)
 
     h: 'help'
     help: ->
@@ -54,7 +53,7 @@ class CLI
         Server commands:
           server: Start the web server (alias 's')
             --port=1234 - Listen on a port (alias 'p')
-            --socket=/path/to-socket - Listen on a socket
+            --socket=/path/to/socket - Listen on a socket
       """
 
     v: 'version'
