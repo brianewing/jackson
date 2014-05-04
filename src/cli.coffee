@@ -5,11 +5,9 @@ path = require('path')
 minimist = require('minimist')
 changeCase = require('change-case')
 
-{extend, clone} = require('./util')
+{jacksonVersion, extend, clone} = require('./util')
 
 class CLI
-  jacksonVersion = require(__dirname + '/../package.json').version
-
   constructor: (@app, argv) ->
     @argv = argv || process.argv.slice(2)
     @args = minimist(@argv)

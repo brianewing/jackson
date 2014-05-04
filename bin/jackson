@@ -28,7 +28,7 @@ var moduleNames = ['app', 'index', 'server'];
 try {
   var app = findApp(moduleNames);
 
-  if(app && app instanceof Jackson.Application) {
+  if(app && app.jacksonVersion) {
     new Jackson.CLI(app).run();
   } else {
     new Jackson.CLI().run();

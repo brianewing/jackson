@@ -10,13 +10,14 @@ Router = require('./router')
 Controller = require('./controller')
 CLI = require('./cli')
 
-{clone, ClassHelpers} = require('./util')
+{clone, ClassHelpers, jacksonVersion} = require('./util')
 
 class Application
   ClassHelpers(@)
 
   _mounts: null
   _ect: null
+  jacksonVersion: jacksonVersion
 
   @route = ->
     (@router ||= new Router).route(arguments...)

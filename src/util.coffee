@@ -21,4 +21,6 @@ ClassHelpers = (klass) ->
 
   klass::bind = (fn, curry...) -> fn.bind(@, curry...)
 
-module.exports = {clone, extend, ClassHelpers}
+jacksonVersion = require(__dirname + '/../package.json').version
+
+module.exports = {clone, extend, ClassHelpers, jacksonVersion}
