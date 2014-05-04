@@ -134,7 +134,12 @@ class Application.DefaultHandlers extends Controller
     @view.inspect = util.inspect
     @view.req = @req
 
-  notFound: -> @render '404.html'
-  error: (error) -> @render '500.html', {error}
+  notFound: ->
+    @status = 404
+    @render '404.html'
+
+  error: (error) ->
+    @status = 500
+    @render '500.html', {error}
 
 module.exports = Application
