@@ -1,0 +1,9 @@
+{
+  "name": "$PACKAGE_NAME$",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "jackson": "~$JACKSON_VERSION$",
+    "coffee-script": "^1.7.1"
+  }
+}
