@@ -1,6 +1,8 @@
 {Application, Controller, CLI} = require('jackson')
 
 class $APPLICATION_NAME$ extends Application
+  templateRoot: __dirname + '/templates'
+
   @route '/', ->
     @render 'index.html'
 
