@@ -2,5 +2,7 @@
 node_modules/
 /dev
 
+/scripts
 /src
-*.coffee
+/index.coffee
+/test
