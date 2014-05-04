@@ -5,8 +5,9 @@ minimist = require('minimist')
 class CLI
   jacksonVersion = require(__dirname + '/../package.json').version
 
-  constructor: (@app, @argv) ->
-    @args = minimist(@argv || '')
+  constructor: (@app, argv) ->
+    @argv = argv || process.argv.slice(2)
+    @args = minimist(@argv)
 
   run: ->
     [command, subcommands...] = @args._
