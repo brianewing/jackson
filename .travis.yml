@@ -5,6 +5,7 @@ node_js:
   - "0.8"
   - "0.6"
 
+before_install: npm update -g npm
 matrix:
   allow_failures:
     - node_js: "0.11"
