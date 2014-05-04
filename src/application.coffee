@@ -8,9 +8,9 @@ ECT = require('ect')
 
 Router = require('./router')
 Controller = require('./controller')
-{clone, ClassHelpers} = require('./util')
 CLI = require('./cli')
 
+{clone, ClassHelpers} = require('./util')
 
 class Application
   ClassHelpers(@)
@@ -36,6 +36,9 @@ class Application
     @options = clone(@options, options)
 
     @initialize?()
+
+  runCli: (args) ->
+    new CLI(@, args).run()
 
   listen: ->
     [socketOrPort, args..., cb] = arguments
