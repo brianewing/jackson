@@ -5,6 +5,6 @@ global.expect = require('chai').expect
 
 global.async = require('async')
 
-http = require('http')
+httpMocks = require('node-mocks-http')
 global.stubReqRes = (reqOptions={}, resOptions={}) ->
-  [req = new http.ClientRequest(reqOptions), new http.ServerResponse(req)]
+  [httpMocks.createRequest(reqOptions), httpMocks.createResponse(resOptions)]

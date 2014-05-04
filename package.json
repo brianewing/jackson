@@ -24,6 +24,7 @@
   "devDependencies": {
     "coffee-script": "~1.7.1",
     "mocha": "~1.18.2",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "node-mocks-http": "~1.0.4"
   }
 }
