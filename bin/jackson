@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+try {
+  require('coffee-script/register'); // enables us to load CoffeeScript modules
+} catch(e) {}
+
+function findApp(moduleNames) {
+  var app = null;
+  var cwd = process.cwd();
+
+  moduleNames.forEach(function(name) {
+    try {
+      app = require(cwd + '/' + name);
+    } catch(e) {
+      if(e.code != 'MODULE_NOT_FOUND') {
+        throw e; // exception thrown in app code, bubble
+      }
+    }
+  });
+
+  return app;
+}
+
+var moduleNames = ['app', 'index', 'server'];
+
+try {
+  var app = findApp(moduleNames);
+
+  if(typeof app.runCli == 'function') {
+    app.runCli();
+  } else {
+    console.error("Please export your application instance, eg: module.exports = new MyApp()");
+    process.exit(1);
+  }
+} catch(e) {
+  console.error("Your application threw an exception:\n");
+  console.error(e.stack);
+
+  process.exit(1);
+}
+

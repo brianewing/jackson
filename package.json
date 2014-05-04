@@ -10,7 +10,9 @@
     "watch": "coffee -c index.coffee && coffee -w -o lib/ -c src/",
     "prepublish": "coffee -c index.coffee && coffee -o lib/ -c src/"
   },
-
+  "bin": {
+    "jack": "./bin/jackson"
+  },
   "dependencies": {
     "url-pattern": "~0.5.0",
     "async": "~0.7.0",

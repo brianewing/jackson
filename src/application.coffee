@@ -9,6 +9,8 @@ ECT = require('ect')
 Router = require('./router')
 Controller = require('./controller')
 {clone, ClassHelpers} = require('./util')
+CLI = require('./cli')
+
 
 class Application
   ClassHelpers(@)
@@ -50,6 +52,10 @@ class Application
     @_server.listen args..., =>
       @log("Listening on #{desc}, pid #{process.pid.toString().red}")
       cb?()
+
+  runCli: (args)->
+    args ||= process.argv.slice(2)
+    new CLI(@, args).run()
 
   mount: (urlPrefix, app) ->
     if urlPrefix[urlPrefix.length - 1] isnt '/'
