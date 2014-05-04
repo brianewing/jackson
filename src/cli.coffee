@@ -3,7 +3,9 @@ path = require('path')
 {spawn} = require('child_process')
 
 minimist = require('minimist')
-changeCase = require('change-case')
+pascalCase = require('pascal-case')
+snakeCase = require('snake-case')
+paramCase = require('param-case')
 
 {jacksonVersion, extend, clone} = require('./util')
 
@@ -80,11 +82,11 @@ class CLI
         @printUsage "new", "MyApp".red, "[directory]"
         return
 
-      directory ||= path.join process.cwd(), changeCase.snakeCase(applicationName)
+      directory ||= path.join process.cwd(), snakeCase(applicationName)
 
       vars =
-        APPLICATION_NAME: changeCase.pascalCase(applicationName)
-        PACKAGE_NAME: changeCase.paramCase(applicationName)
+        APPLICATION_NAME: pascalCase(applicationName)
+        PACKAGE_NAME: paramCase(applicationName)
         JACKSON_VERSION: jacksonVersion
 
       if not fs.existsSync(directory) or not fs.statSync(directory).isDirectory()

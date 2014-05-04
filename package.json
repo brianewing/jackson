@@ -19,7 +19,9 @@
     "minimist": "~0.0.6",
     "ect": "~0.5.0",
     "colors": "~0.6.2",
-    "change-case": "~2.1.1"
+    "pascal-case": "~0.1.1",
+    "snake-case": "~0.1.1",
+    "param-case": "~0.1.0"
   },
   "devDependencies": {
     "coffee-script": "~1.7.1",
