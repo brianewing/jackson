@@ -3,6 +3,7 @@ fs = require('fs')
 path = require('path')
 util = require('util')
 
+require('colors')
 ECT = require('ect')
 
 Router = require('./router')
@@ -35,19 +36,19 @@ class Application
     @initialize?()
 
   listen: ->
-    listenArgs = [arguments...]
+    [socketOrPort, args..., cb] = arguments
+    if typeof cb isnt 'function'
+      args.push(cb)
+      cb = null
 
-    if typeof listenArgs[listenArgs.length - 1] is 'function'
-      cb = listenArgs.pop()
-
-    listenType = switch typeof listenArgs[0]
-      when 'string' then 'socket'
-      when 'number' then 'port'
-      else ''
+    if typeof socketOrPort is 'number'
+      desc = "port #{socketOrPort.toString().green}"
+    else
+      desc = socketOrPort.white
 
     @_server = http.createServer(@dispatchReq)
-    @_server.listen listenArgs..., =>
-      @log("Listening on #{listenType} #{listenArgs[0]}, pid #{process.pid}")
+    @_server.listen args..., =>
+      @log("Listening on #{desc}, pid #{process.pid.toString().red}")
       cb?()
 
   mount: (urlPrefix, app) ->
@@ -110,12 +111,21 @@ class Application
     @_ect[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
-    msgs = [new Date().toISOString(), '|', @constructor.name, '|', msgs...]
+    msgs = [new Date().toISOString().green, '|', @constructor.name.yellow, '|', msgs...]
     console.log.apply(console, msgs)
 
-  logRequest: (req) ->
+  logRequest: (req, res) ->
+    status = res.statusCode.toString()
+
+    statusColor = switch status[0]
+      when '2' then 'green'
+      when '4' then 'yellow'
+      when '5' then 'red'
+      else 'blue'
+
     msTaken = (new Date) - req._timestamp
-    @log req.connection.remoteAddress, '|', msTaken + 'ms', '|', req.method, req.url
+    @log status[statusColor], req.method.yellow, req.url.white
+    @log "#{msTaken}ms".yellow, req.connection.remoteAddress
 
 class Application.DefaultHandlers extends Controller
   templateRoot: __dirname + '/../tpl'
