@@ -58,9 +58,8 @@ class Application
     (@_mounts ||= Object.create(null))[urlPrefix] = app
 
   dispatchReq: (req, res) =>
-    if @options.logRequests
-      req._timestamp = +new Date
-      res.on 'finish', @bind(@logRequest, req)
+    req._timestamp = +new Date
+
 
     @dispatchUrl(req, res, req.method, req.url)
 
@@ -76,6 +75,7 @@ class Application
           return app.dispatchUrl(req, res, method, url)
 
     route = @constructor.router?.match(method, url)
+    res.on 'finish', @bind(@logRequest, req, res) if @options.logRequests
 
     if route
       @dispatch(req, res, route)
