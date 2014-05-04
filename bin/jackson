@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+var Jackson = require(__dirname + '/../');
+
 try {
   require('coffee-script/register'); // enables us to load CoffeeScript modules
 } catch(e) {}
@@ -26,16 +28,10 @@ var moduleNames = ['app', 'index', 'server'];
 try {
   var app = findApp(moduleNames);
 
-  if(app && typeof app.runCli == 'function') {
-    app.runCli();
+  if(app && app instanceof Jackson.Application) {
+    new Jackson.CLI(app).run();
   } else {
-    if(app) {
-      console.error("Please export your application instance, eg: module.exports = new MyApp()");
-    } else {
-      console.error("No app module found, tried: " + moduleNames.join(", "));
-    }
-
-    process.exit(1);
+    new Jackson.CLI().run();
   }
 } catch(e) {
   console.error("Your application threw an exception:\n");

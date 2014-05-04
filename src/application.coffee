@@ -37,9 +37,6 @@ class Application
 
     @initialize?()
 
-  runCli: (args) ->
-    new CLI(@, args).run()
-
   listen: ->
     [socketOrPort, args..., cb] = arguments
     if typeof cb isnt 'function'
