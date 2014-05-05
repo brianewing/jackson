@@ -143,8 +143,7 @@ class Application
       else 'blue'
 
     msTaken = (new Date) - req._timestamp
-    @log status[statusColor], req.method.yellow, req.url.white
-    @log "#{msTaken}ms".yellow, req.connection.remoteAddress
+    @log status[statusColor], req.method.yellow, req.url.white, "#{msTaken}ms".yellow, req.connection.remoteAddress
 
 class Application.DefaultHandlers extends Controller
   templateRoot: __dirname + '/../tpl'
