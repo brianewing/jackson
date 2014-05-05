@@ -127,7 +127,11 @@ class CLI
           console.log "New application #{vars.APPLICATION_NAME.yellow} created in #{directory.yellow}"
         else
           console.log "Error during npm install".red
-          console.log "The new application has been left in #{directory} for you to investigate"
+
+    v: 'version'
+    version: ->
+      console.log "Jackson v#{jacksonVersion}"
+      console.log "The new application has been left in #{directory} for you to investigate"
 
   # commands to run against a Jackson application
   appCommands:
@@ -137,8 +141,9 @@ class CLI
     server: ->
       @app.listen(@args.socket || parseInt(@args.port || @args.p) || 1234)
 
-    v: 'version'
-    version: ->
-      console.log "Jackson v#{jacksonVersion}"
+    c: 'repl'
+    r: 'repl'
+    repl: ->
+      @app.startRepl()
 
 module.exports = CLI

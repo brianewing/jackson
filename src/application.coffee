@@ -10,7 +10,7 @@ Router = require('./router')
 Controller = require('./controller')
 CLI = require('./cli')
 
-{clone, ClassHelpers, jacksonVersion} = require('./util')
+{extend, clone, ClassHelpers, jacksonVersion} = require('./util')
 
 class Application
   ClassHelpers(@)
@@ -36,6 +36,8 @@ class Application
     @_ect = Object.create(null)
     @options = clone(@options, options)
 
+    @repl = {}
+
     @initialize?()
 
   listen: ->
@@ -57,6 +59,18 @@ class Application
     @_server.listen socketOrPort, args..., =>
       @log("Listening on #{desc}, pid #{process.pid.toString().red}")
       cb?()
+
+  startRepl: ->
+    Jackson = require('..')
+    utils = require('./util')
+
+    {context} = require('repl').start
+      prompt: @constructor.name + "> "
+      useGlobal: true
+      useColors: true
+
+    extend(context, Jackson, {Jackson, jacksonVersion}, utils, @repl)
+    context[@constructor.name] = @constructor
 
   mount: (urlPrefix, app) ->
     if urlPrefix[urlPrefix.length - 1] isnt '/'
