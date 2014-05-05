@@ -1,6 +1,6 @@
-{Application, Controller, CLI} = require('jackson')
+Jackson = require('jackson')
 
-class $APPLICATION_NAME$ extends Application
+class $APPLICATION_NAME$ extends Jackson.Application
   templateRoot: __dirname + '/templates'
 
   @route '/', ->
@@ -9,7 +9,7 @@ class $APPLICATION_NAME$ extends Application
 app = new $APPLICATION_NAME$()
 
 if require.main is module
-  new CLI(app).run()
+  new Jackson.CLI(app).run()
 else
   module.exports = app
 
