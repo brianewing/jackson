@@ -24,15 +24,10 @@ function findApp(moduleNames) {
 }
 
 var moduleNames = ['app', 'index', 'server'];
+var app = null;
 
 try {
-  var app = findApp(moduleNames);
-
-  if(app && app.jacksonVersion) {
-    new Jackson.CLI(app).run();
-  } else {
-    new Jackson.CLI().run();
-  }
+  app = findApp(moduleNames);
 } catch(e) {
   console.error("Your application threw an exception:\n");
   console.error(e.stack);
@@ -40,3 +35,8 @@ try {
   process.exit(1);
 }
 
+if(app && app.jacksonVersion) {
+  new Jackson.CLI(app).run();
+} else {
+  new Jackson.CLI().run();
+}
