@@ -16,7 +16,14 @@ class Controller
     @_callbacks = clone(@_callbacks)
     @_callbacks[event] = (@_callbacks[event] || []).concat(callbacks)
 
-  @fire = (instance, event, cb) ->
+  @fire = (instance, events..., cb) ->
+    if typeof cb isnt 'function'
+      events.push(cb)
+      cb = null
+
+    async.forEachSeries events, @_fire.bind(@, instance), cb
+
+  @_fire = (instance, event, cb) ->
     callbacks = @_callbacks?[event]
     return cb?() if not callbacks?.length
 
