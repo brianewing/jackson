@@ -96,7 +96,7 @@ class Controller
       true
 
   applyAsAction: (action) ->
-    @apply action, (value for own key, value of @routeParams)...
+    @apply action, (value for own key, value of @routeParams when key isnt '_')..., (@routeParams._ || [])...
 
   callAction: (action, cb) ->
     @constructor.fire @, 'before', =>
