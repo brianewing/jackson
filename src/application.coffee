@@ -69,7 +69,7 @@ class Application
       useGlobal: true
       useColors: true
 
-    extend(context, Jackson, {Jackson, jacksonVersion}, utils, @repl)
+    extend(context, Jackson, {Jackson, jacksonVersion}, utils, {app: @}, @repl)
     context[@constructor.name] = @constructor
 
   mount: (urlPrefix, app) ->
