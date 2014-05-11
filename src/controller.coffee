@@ -59,7 +59,8 @@ class Controller
 
     @initialize?()
 
-  header: (name, value) ->
+  header: (name, value, replace=true) ->
+    return if replace is false and @headers[name.toLowerCase()]
     @headers[name.toLowerCase()] = value
 
   viewContext: (context) ->
@@ -76,12 +77,12 @@ class Controller
       [body, status] = [status, @status]
 
     if typeof body is 'object'
-      @header('content-type', 'application/json')
+      @header('content-type', 'application/json', false)
       body = JSON.stringify(body)
     else if typeof body is 'string'
-      @header('content-type', 'text/html')
+      @header('content-type', 'text/html', false)
 
-    @header('content-length', body.length)
+    @header('content-length', body.length, false)
 
     @res.writeHead(status, @headers)
     @res.end(body)
