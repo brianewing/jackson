@@ -109,4 +109,6 @@ class Controller
   error: (error) ->
     @app.render(@req, @res, 'error', error)
 
+  log: (msgs...) -> @app.log(@constructor.name.yellow, msgs...)
+
 module.exports = Controller
