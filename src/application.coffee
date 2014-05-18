@@ -40,17 +40,17 @@ class Application
 
     @initialize?()
 
-  listen: ->
-    [socketOrPort, args..., cb] = arguments
+  listen: (socketOrPort, args..., cb)->
     if typeof cb isnt 'function'
       args.push(cb)
       cb = null
 
     if typeof socketOrPort is 'number'
-      desc = "port #{socketOrPort.toString().green}"
-    else
+      host = args[0] or 'localhost'
+      desc = "#{host.yellow}:#{socketOrPort.toString().green}"
+    else # socket
       if fs.existsSync(socketOrPort) and fs.statSync(socketOrPort).isSocket()
-        # socket already exists, clean it up before bind
+        # unlink existing socket
         fs.unlinkSync(socketOrPort)
 
       desc = socketOrPort.white
@@ -58,7 +58,7 @@ class Application
     @_server = http.createServer(@dispatchReq)
     @_server.listen socketOrPort, args..., =>
       @log("Listening on #{desc}, pid #{process.pid.toString().red}")
-      cb?()
+      cb?(socketOrPort, args...)
 
   startRepl: ->
     Jackson = require('..')

@@ -7,6 +7,8 @@ pascalCase = require('pascal-case')
 snakeCase = require('snake-case')
 paramCase = require('param-case')
 
+open = require('open')
+
 {jacksonVersion, extend, clone} = require('./util')
 
 class CLI
@@ -139,7 +141,13 @@ class CLI
 
     s: 'server'
     server: ->
-      @app.listen(@args.socket || parseInt(@args.port || @args.p) || 1234)
+      socketOrPort = @args.socket || parseInt(@args.port || @args.p) || 1234
+      bindOn = @args.host
+
+      @app.listen socketOrPort, bindOn, (port, host) =>
+        if @args.open && typeof port is 'number'
+          host ||= "localhost"
+          open("http://#{host}:#{port}/")
 
     c: 'repl'
     r: 'repl'
