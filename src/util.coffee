@@ -1,19 +1,20 @@
-extend = (obj, rest...) ->
+_extend = (obj, rest) ->
   for o in rest when o
     obj[key] = val for own key, val of o
 
   obj
 
-clone = (obj, rest...) -> extend({}, obj, rest...)
+exports.extend = (obj, rest...) -> _extend(obj, rest)
+exports.clone = (objs...) -> _extend({}, objs)
 
-ClassHelpers = (klass) ->
+exports.ClassHelpers = (klass) ->
   klass.extend = (extensions...) ->
     cls = class extends @
 
     for objOrFn in extensions
       switch typeof objOrFn
         when "object"
-          extend(cls.prototype, objOrFn)
+          _extend(cls.prototype, [objOrFn])
         when "function"
           objOrFn.call(cls)
 
@@ -21,6 +22,4 @@ ClassHelpers = (klass) ->
 
   klass::bind = (fn, curry...) -> fn.bind(@, curry...)
 
-jacksonVersion = require(__dirname + '/../package.json').version
-
-module.exports = {clone, extend, ClassHelpers, jacksonVersion}
+exports.jacksonVersion = require(__dirname + '/../package.json').version
