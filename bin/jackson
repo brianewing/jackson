@@ -36,7 +36,7 @@ try {
 }
 
 if(app && app.jacksonVersion) {
-  new Jackson.CLI(app).run();
+  app.startCli();
 } else {
   new Jackson.CLI().run();
 }

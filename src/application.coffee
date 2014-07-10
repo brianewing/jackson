@@ -72,6 +72,9 @@ class Application
     extend(context, Jackson, {Jackson, jacksonVersion}, utils, {app: @}, @repl)
     context[@constructor.name] = @constructor
 
+  startCli: ->
+    new CLI(@).run()
+
   mount: (urlPrefix, app) ->
     if urlPrefix[urlPrefix.length - 1] isnt '/'
       urlPrefix += '/'
