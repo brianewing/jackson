@@ -145,7 +145,7 @@ class CLI
       bindOn = @args.host
 
       @app.listen socketOrPort, bindOn, (port, host) =>
-        if @args.open && typeof port is 'number'
+        if @args.open && typeof socketOrPort is 'number'
           host ||= "localhost"
           open("http://#{host}:#{port}/")
 
