@@ -1,6 +1,7 @@
 path = require('path')
 
 async = require('async')
+snakeCase = require('snake-case')
 
 {extend, clone, ClassHelpers} = require('./util')
 
@@ -10,8 +11,8 @@ class Controller
   @bind = (event, callbacks...) ->
     # we clone @_callbacks, then set
     # @_callbacks[event] to a new array [existingCallbacks..., callbacks...]
-    # this is a semi-hack to support inheritance of callbacks in controllers
-    # designed to be extended
+    # this is a semi-hack to support inheritance of callbacks
+    # when controller classes are extended
 
     @_callbacks = clone(@_callbacks)
     @_callbacks[event] = (@_callbacks[event] || []).concat(callbacks)
@@ -53,9 +54,11 @@ class Controller
 
   status: 200
 
-  constructor: (@app, @req, @res, @routeParams={}) ->
+  constructor: (@app, @req, @res, @route={}) ->
     @view = {}
     @headers = {}
+
+    @route.params ||= {}
 
     @initialize?()
 
@@ -97,7 +100,7 @@ class Controller
       true
 
   applyAsAction: (action) ->
-    @apply action, (value for own key, value of @routeParams when key isnt '_')..., (@routeParams._ || [])...
+    @apply action, (value for own key, value of @route.params when key isnt '_')..., (@route.params._ || [])...
 
   callAction: (action, cb) ->
     @constructor.fire @, 'before', =>

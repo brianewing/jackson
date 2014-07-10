@@ -41,9 +41,9 @@ class Router
     @routes.push(options)
 
   match: (method, url) ->
-    for route in @routes
-      if method is route.method and match = route.pattern.match(url)
-        return extend({routeParams: match}, route)
+    for route in @routes when route.method is method
+      if match = route.pattern.match(url)
+        return extend(params: match, route)
 
     false
 

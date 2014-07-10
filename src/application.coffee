@@ -102,19 +102,19 @@ class Application
       @render(req, res, 'notFound')
 
   dispatch: (req, res, route) ->
-    {fn, controller, action, routeParams} = route
+    {fn, controller, action} = route
 
     if controller? and action
       controller = @lookup(controller)
 
       if controller.prototype instanceof Controller
-        new controller(@, req, res, routeParams).callAction(action)
+        new controller(@, req, res, route).callAction(action)
       else
         fn = controller::[action] # dispatch below
 
     if fn
       # dispatch under generic controller
-      controller = new Controller(@, req, res, routeParams)
+      controller = new Controller(@, req, res, route)
       controller.applyAsAction(fn)
 
   render: (req, res, action, args...) ->

@@ -19,7 +19,7 @@ describe "Jackson.Controller", ->
 
   describe '#applyAsAction()', ->
     it 'calls functions with route segments as arguments', ->
-      controller = new Jackson.Controller({}, stubReqRes()..., {foo: 'bar', bar: 'baz', id: 123})
+      controller = new Jackson.Controller({}, stubReqRes()..., params: {foo: 'bar', bar: 'baz', id: 123})
       controller.applyAsAction (foo, bar, id) ->
         expect(@).to.equal(controller)
 
