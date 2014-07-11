@@ -15,8 +15,6 @@ CLI = require('./cli')
 class Application
   ClassHelpers(@)
 
-  _mounts: null
-  _ect: null
   jacksonVersion: jacksonVersion
 
   @route = ->
@@ -33,10 +31,11 @@ class Application
     logRequests: true
 
   constructor: (options) ->
-    @_ect = Object.create(null)
     @options = clone(@options, options)
 
-    @repl = {}
+    @name ||= @constructor.name
+    @repl ||= {}
+    @_ectCache ||= {}
 
     @initialize?()
 
@@ -65,21 +64,24 @@ class Application
     utils = require('./util')
 
     {context} = require('repl').start
-      prompt: @constructor.name + "> "
+      prompt: @name + "> "
       useGlobal: true
       useColors: true
 
     extend(context, Jackson, {Jackson, jacksonVersion}, utils, {app: @}, @repl)
     context[@constructor.name] = @constructor
+    context[@name] = @constructor
 
   startCli: ->
     new CLI(@).run()
 
   mount: (urlPrefix, app) ->
+    @_mounts ||= {}
+
     if urlPrefix[urlPrefix.length - 1] isnt '/'
       urlPrefix += '/'
 
-    (@_mounts ||= Object.create(null))[urlPrefix] = app
+    @_mounts[urlPrefix] = app
 
   dispatchReq: (req, res) =>
     req._timestamp = +new Date
@@ -129,8 +131,8 @@ class Application
   renderTemplate: (templateRoot, tpl, context) ->
     templateRoot = templateRoot or @templateRoot or path.join(process.cwd(), 'templates')
 
-    @_ect[templateRoot] ||= ECT(watch: true, root: templateRoot)
-    @_ect[templateRoot].render(tpl, context)
+    @_ectCache[templateRoot] ||= ECT(watch: true, root: templateRoot)
+    @_ectCache[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
     msgs = [new Date().toISOString().green, '|', @name.yellow, '|', msgs...]
@@ -149,7 +151,7 @@ class Application
     @log status[statusColor], req.method.yellow, req.url.white, "#{msTaken}ms".yellow, req.connection.remoteAddress
 
 class Application.DefaultHandlers extends Controller
-  templateRoot: __dirname + '/../tpl'
+  templateRoot: __dirname + '/../tpl' # tpl dir from jackson module
 
   initialize: ->
     @view.inspect = util.inspect
