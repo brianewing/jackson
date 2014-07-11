@@ -133,7 +133,7 @@ class Application
     @_ect[templateRoot].render(tpl, context)
 
   log: (msgs...) ->
-    msgs = [new Date().toISOString().green, '|', (@name || @constructor.name).yellow, '|', msgs...]
+    msgs = [new Date().toISOString().green, '|', @name.yellow, '|', msgs...]
     console.log.apply(console, msgs)
 
   logRequest: (req, res) ->
