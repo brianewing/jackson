@@ -9,7 +9,7 @@ class $APPLICATION_NAME$ extends Jackson.Application
 app = new $APPLICATION_NAME$()
 
 if require.main is module
-  new Jackson.CLI(app).run()
+  app.startCli()
 else
   module.exports = app
 
