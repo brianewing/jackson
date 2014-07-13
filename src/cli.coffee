@@ -38,7 +38,7 @@ class CLI
       return false
 
   printUsage: (command, usage...) ->
-    console.log "usage:", "jack".white, command.yellow, usage...
+    console.log "usage:", "jack".yellow, command.yellow, usage...
 
   handler: (command) ->
     handler = @commands[command]
@@ -81,7 +81,7 @@ class CLI
 
     new: (applicationName, directory) ->
       if not applicationName
-        @printUsage "new", "MyApp".red, "[directory]"
+        @printUsage "new", "MyApp".white, "[directory]"
         return
 
       directory ||= path.join process.cwd(), snakeCase(applicationName)
