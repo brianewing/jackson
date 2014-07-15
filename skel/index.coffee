@@ -8,8 +8,6 @@ class $APPLICATION_NAME$ extends Jackson.Application
 
 app = new $APPLICATION_NAME$()
 
-if require.main is module
-  app.startCli()
-else
-  module.exports = app
-
+# ~
+module.exports = app
+app.startCli() if require.main is module
