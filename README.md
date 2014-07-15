@@ -76,6 +76,8 @@ Jackson has a neat command line interface, with the `jack` command.
 
 `$ cd my_app/`
 
+Pass `--js` to `jack new` if you would prefer not to use CoffeeScript.
+
 #### Start the application:
 
 `$ jack server`
