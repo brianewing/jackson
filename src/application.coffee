@@ -84,7 +84,7 @@ class Application
     @_mounts[urlPrefix] = app
 
   dispatchReq: (req, res) =>
-    req._timestamp = +new Date
+    req._timestamp = Date.now()
     @dispatchUrl(req, res, req.method, req.url)
 
   dispatchUrl: (req, res, method, url) ->
@@ -147,7 +147,7 @@ class Application
       when '5' then 'red'
       else 'blue'
 
-    msTaken = (new Date) - req._timestamp
+    msTaken = Date.now() - req._timestamp
     @log status[statusColor], req.method.yellow, req.url.white, "#{msTaken}ms".yellow, req.connection.remoteAddress
 
 class Application.DefaultHandlers extends Controller
