@@ -3,15 +3,12 @@ var Jackson = require('jackson');
 var $APPLICATION_NAME$ = Jackson.Application.extend({
   name: "$APPLICATION_NAME$",
   templateRoot: __dirname + '/templates'
-}, function() {
-  this.route('/', function() {
-    this.render('index.html');
-  });
 });
 
-var app = new $APPLICATION_NAME$();
+$APPLICATION_NAME$.route('/', function() {
+  this.render('index.html');
+});
 
-// ~
-module.exports = app
-if(require.main === module) app.startCli();
+module.exports = new $APPLICATION_NAME$;
+if(require.main === module) module.exports.startCli();
 
