@@ -91,7 +91,18 @@ class Controller
     @res.end(body)
 
   apply: (fn, args...) ->
-    fn = if typeof fn is 'function' then fn else @[fn]
+    if typeof fn is 'string' # called like #apply('nameOfAction')
+      action = @[fn]
+
+      if typeof action is 'string'
+        # a template name was given instead of a function for the action
+        templateName = action
+
+        @render(templateName)
+        return
+      else
+        # action is a function, we'll apply it below
+        fn = action
 
     try
       fn.apply(@, args)
