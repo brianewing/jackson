@@ -68,8 +68,13 @@ class CLI
       appHelp = """
         Application commands:
           #{'server'.yellow}: Start the web server (alias 's')
-            --port=1234 - Listen on a port (alias 'p')
+            --port=1234 - Listen on a port (default, alias '-p')
+            --host=localhost - Bind to a specific host when listening on a port
             --socket=/path/to/socket - Listen on a socket
+
+            --open - Open the URL in your default web browser after listening
+
+          #{'repl'.yellow}: Start a REPL (alias 'r')
       """
 
       if @app
