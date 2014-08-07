@@ -40,10 +40,16 @@ class Router
 
     @routes.push(options)
 
+  _is = (controllerOrUrl, action) ->
+    if action
+      @controller is controllerOrUrl and (action is '*' or action is @action)
+    else
+      @pattern.match(controllerOrUrl)?
+
   match: (method, url) ->
     for route in @routes when route.method is method
       if match = route.pattern.match(url)
-        return extend(params: match, route)
+        return extend(params: match, is: _is, route)
 
     false
 
