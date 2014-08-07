@@ -55,7 +55,7 @@ class Controller
   status: 200
 
   constructor: (@app, @req, @res, @route={}) ->
-    @view = {}
+    @view = {route: @route}
     @headers = {}
 
     @route.params ||= {}
