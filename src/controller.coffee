@@ -59,6 +59,7 @@ class Controller
     @headers = {}
 
     @route.params ||= {}
+    @name ||= @constructor.name
 
     @initialize?()
 
@@ -124,6 +125,6 @@ class Controller
   error: (error) ->
     @app.render(@req, @res, 'error', error)
 
-  log: (msgs...) -> @app.log(@constructor.name.yellow, msgs...)
+  log: (msgs...) -> @app.log(@name.yellow, "|", msgs...)
 
 module.exports = Controller
