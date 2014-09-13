@@ -117,7 +117,7 @@ class CLI
 
             fs.writeFileSync(destPath, contents.trim())
 
-      skelDir = __dirname + '/../' + (if @args.js then 'skel.js' else 'skel')
+      skelDir = __dirname + '/../skel/' + (if @args.js then 'js' else 'coffee')
       copyFiles(skelDir, directory)
 
       console.log()
