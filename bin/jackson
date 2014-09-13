@@ -1,33 +1,32 @@
 #!/usr/bin/env node
 
+try { require('coffee-script/register'); } catch(e) {};
+
 var Jackson = require(__dirname + '/../');
 
-try {
-  require('coffee-script/register'); // enables us to load CoffeeScript modules
-} catch(e) {}
-
-function findApp(moduleNames) {
-  var app = null;
+function findApp(/* moduleNames... */) {
   var cwd = process.cwd();
 
-  moduleNames.forEach(function(name) {
-    try {
-      app = require(cwd + '/' + name);
-    } catch(e) {
-      if(e.code != 'MODULE_NOT_FOUND') {
-        throw e; // exception thrown in app code, bubble
-      }
-    }
-  });
+  for(var i in arguments) {
+    var app, moduleName = arguments[i];
 
-  return app;
+    try {
+      return require(cwd + '/' + moduleName);
+    } catch(e) {
+      if(e.code != 'MODULE_NOT_FOUND') throw(e); // bubble application errors
+    }
+  }
 }
 
-var moduleNames = ['app', 'index', 'server'];
-var app = null;
-
 try {
-  app = findApp(moduleNames);
+  var app = findApp('index', 'app', 'server');
+
+  if(app && app.jacksonVersion) {
+    app.startCli();
+  } else {
+    // no jackson app found
+    new Jackson.CLI().run();
+  }
 } catch(e) {
   console.error("Your application threw an exception:\n");
   console.error(e.stack);
@@ -35,8 +34,3 @@ try {
   process.exit(1);
 }
 
-if(app && app.jacksonVersion) {
-  app.startCli();
-} else {
-  new Jackson.CLI().run();
-}
