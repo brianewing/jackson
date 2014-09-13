@@ -1,4 +1,5 @@
 <% extend 'layout.html' %>
+<% @title = 'Error' %>
 
 <% switch typeof @error: %>
   <% when 'object': %>
@@ -15,5 +16,6 @@
 <% end %>
 
 <hr>
+
 <h3>Request</h3>
 <% include '_request.html', {@req, @inspect} %>
