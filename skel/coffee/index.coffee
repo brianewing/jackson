@@ -10,4 +10,4 @@ app = new $APPLICATION_NAME$()
 
 # ~
 module.exports = app
-app.startCli() if require.main is module
+app.startCli() if module is require.main
