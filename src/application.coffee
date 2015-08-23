@@ -10,10 +10,10 @@ Router = require('./router')
 Controller = require('./controller')
 CLI = require('./cli')
 
-{extend, clone, ClassHelpers, jacksonVersion} = require('./util')
+{extend, clone, addClassHelpers, jacksonVersion} = require('./util')
 
 class Application
-  ClassHelpers(@)
+  addClassHelpers(@)
 
   jacksonVersion: jacksonVersion
 

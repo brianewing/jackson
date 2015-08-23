@@ -9,9 +9,11 @@ paramCase = require('param-case')
 
 open = require('open')
 
-{jacksonVersion, extend, clone} = require('./util')
+{extend, clone, addClassHelpers, jacksonVersion} = require('./util')
 
 class CLI
+  addClassHelpers(@)
+
   constructor: (@app, argv) ->
     @argv = argv || process.argv.slice(2)
     @args = minimist(@argv)

@@ -3,10 +3,10 @@ path = require('path')
 async = require('async')
 snakeCase = require('snake-case')
 
-{extend, clone, ClassHelpers} = require('./util')
+{extend, clone, addClassHelpers} = require('./util')
 
 class Controller
-  ClassHelpers(@)
+  addClassHelpers(@)
 
   @bind = (event, callbacks...) ->
     # we clone @_callbacks, then set

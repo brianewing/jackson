@@ -7,7 +7,7 @@ _extend = (obj, rest) ->
 exports.extend = (obj, rest...) -> _extend(obj, rest)
 exports.clone = (objs...) -> _extend({}, objs)
 
-exports.ClassHelpers = (klass) ->
+exports.addClassHelpers = (klass) ->
   klass.extend = (extensions...) ->
     cls = class extends @
 

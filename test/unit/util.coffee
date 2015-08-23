@@ -1,4 +1,4 @@
-{extend, clone, ClassHelpers} = require('../../lib/util')
+{extend, clone, addClassHelpers} = require('../../lib/util')
 
 describe 'Utils', ->
   describe 'extend', ->
@@ -29,7 +29,7 @@ describe 'Utils', ->
 
   describe 'Class helpers', ->
     class Animal
-      ClassHelpers(@)
+      addClassHelpers(@)
 
       eats: 'food'
       greet: -> 'animal'
