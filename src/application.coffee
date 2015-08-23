@@ -75,13 +75,13 @@ class Application
   startCli: ->
     new CLI(@).run()
 
-  mount: (urlPrefix, app) ->
+  mount: (urlPrefix, appOrFn) ->
     @_mounts ||= {}
 
     if urlPrefix[urlPrefix.length - 1] isnt '/'
       urlPrefix += '/'
 
-    @_mounts[urlPrefix] = app
+    @_mounts[urlPrefix] = appOrFn
 
   dispatchReq: (req, res) =>
     req._timestamp = Date.now()
@@ -89,14 +89,17 @@ class Application
 
   dispatchUrl: (req, res, method, url) ->
     if @_mounts?
-      if url[url.length - 1] isnt '/'
-        urlWithSlash = url + '/'
-      else urlWithSlash = url
+      urlWithSlash = if url[url.length - 1] is '/' then url else url + '/'
 
-      for urlPrefix, app of @_mounts
-        if urlWithSlash is urlPrefix or url[...urlPrefix.length] is urlPrefix
-          url = url.slice(urlPrefix.length - 1) or '/'
-          return app.dispatchUrl(req, res, method, url)
+      for mountPrefix, appOrFn of @_mounts
+        if urlWithSlash is mountPrefix or url[...mountPrefix.length] is mountPrefix
+          url = url.slice(mountPrefix.length - 1) || '/'
+
+          if appOrFn instanceof Jackson.Application
+            return appOrFn.dispatchUrl(req, res, method, url)
+          else if typeof appOrFn is 'function'
+            req.url = url # mask the URL
+            appOrFn(req, res)
 
     route = @constructor.router?.match(method, url)
     res.on 'finish', @bind(@logRequest, req, res) if @options.logRequests
